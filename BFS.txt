@@ -1,0 +1,77 @@
+// You are using GCC
+#include <stdio.h>
+#include <stdlib.h>
+
+int queue[100], rear=-1, front=-1;
+
+void enq(int n){
+    if(front==-1)
+        ++front;
+    queue[++rear]=n;
+}
+
+int deq(){
+    int n=queue[front];
+    if(front+1>rear){
+        front=-1;
+        rear=-1;
+    }else
+        front++;
+    return n;  
+}
+
+struct node{
+    int val;
+    struct node *nxt;
+}*n1,*n2,*n3,*h; 
+
+int N, E;
+
+void insert(int src, int dest){
+    n2 = (struct node*)malloc(sizeof(struct node));
+    n2->val=dest;
+    if(h[src].nxt==NULL)
+        h[src].nxt=n2;
+    else{
+        n3=h[src].nxt;
+        while(n3->nxt!=NULL){
+            if(n3->val==dest)
+                break;
+            n3=n3->nxt;
+        }
+        if(n3->val!=dest)
+        n3->nxt=n2;
+    }
+}
+void bfs(){
+    h[0].val=1;
+    enq(0);
+    while(front!=-1){
+        int qw = deq();
+        printf("%d ",qw);
+        h[qw].val=1;
+        n1 = h[qw].nxt;
+        while(n1!=NULL){
+            if(h[n1->val].val==0)
+                enq(n1->val);
+            n1=n1->nxt;
+        }
+    }
+    printf("\n");
+    front=-1;
+    rear=-1;
+}
+int main(){
+    int Tc,src,dest;
+    scanf("%d",&Tc);
+    while(Tc){
+        Tc--;
+        scanf("%d %d",&N,&E);
+        h = (struct node*)malloc(N*sizeof(struct node));
+        for(int i=0;i<E;i++){
+            scanf("%d %d",&src,&dest);
+            insert(src,dest);
+        }
+        bfs();
+    }
+}
